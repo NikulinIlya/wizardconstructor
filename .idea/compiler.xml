@@ -9,12 +9,12 @@
         <module name="mastersframework" />
         <module name="windowsconstructor" />
         <module name="wizardconstructor" />
+        <module name="wizardconstructor1" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="mastersframework" target="1.5" />
-      <module name="windowsconstructor" target="1.5" />
-      <module name="wizardconstructor" target="1.5" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="wizardconstructor" target="1.8" />
+      <module name="wizardconstructor1" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
