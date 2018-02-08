@@ -3,18 +3,19 @@ package ru.project.wizardprocess.wizardwindow;
 import ru.project.wizardprocess.IWindowChangeCondition;
 import ru.project.wizardprocess.IWindowElement;
 import ru.project.wizardprocess.IWindowFunction;
+import ru.project.wizardprocess.dialog.IDialogWindow;
 import ru.project.wizardprocess.wizard.IWizard;
 
-public interface IWizardWindow {
+public interface IWizardWindow extends IDialogWindow {
 
     boolean canFlipToNextWindow();
-    String getWindowName();
+    String getName();
     IWizardWindow getNextWindow();
     IWizardWindow getPreviousWindow();
     IWizard getWizard();
     boolean isWindowComplete();
-    void setPreviousWindow();
-    void setWizard();
+    void setPreviousWindow(IWizardWindow window);
+    void setWizard(IWizard newWizard);
 
 
 //    IWizardWindow makeWindow(String windowName, double length, double width);
