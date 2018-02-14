@@ -12,10 +12,12 @@ public interface IWizard {
     void addWindows();
     boolean canFinish();
     void createWindowControls(String fxmlFilePath);
-    IWizardWindow getStartingWindow(IWizardWindow window);
+    void dispose();
+    IWizardWindow getStartingWindow();
     IWizardWindow getNextWindow(IWizardWindow window);
     IWizardWindow getPreviousWindow(IWizardWindow window);
     IWizardWindow getWindow(String windowName);
+    IWizardWindow[] getWindows();
     IDialogSettings getDialogSettings();
     String getWizardName();
     int getWindowsCount();

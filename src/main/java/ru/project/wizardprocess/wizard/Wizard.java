@@ -17,6 +17,7 @@ public abstract class Wizard implements IWizard {
     private boolean isHelpAvailable = false;
     private String windowTitle = null;
     private IDialogSettings dialogSettings = null;
+    private boolean forcePreviousAndNextButtons = false;
 //    private WizardWindow window;
 
 
@@ -46,9 +47,6 @@ public abstract class Wizard implements IWizard {
 
     @Override
     public void createWindowControls(String fxmlFilePath) {
-        // the default behavior is to create all the pages controls
-        // page is responsible for ensuring the created control is
-        // accessible via getControl.
         windows.forEach(window -> {
             window.createControl(fxmlFilePath);
             Assert.isNotNull(
@@ -57,5 +55,127 @@ public abstract class Wizard implements IWizard {
         });
     }
 
+    @Override
+    public void dispose() {
+        for (IWizardWindow window : windows) {
+            try {
+                window.dispose();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+    }
 
+    @Override
+    public IWizardWorkspace getWorkspace() {
+        return workspace;
+    }
+
+    @Override
+    public IDialogSettings getDialogSettings() {
+        return dialogSettings;
+    }
+
+    @Override
+    public IWizardWindow getNextWindow(IWizardWindow window) {
+        int index = windows.indexOf(window);
+        if (index == windows.size() - 1 || index == -1) {
+            // last page or page not found
+            return null;
+        }
+        return windows.get(index + 1);
+    }
+
+    @Override
+    public IWizardWindow getWindow(String name) {
+        for (IWizardWindow window : windows) {
+            String windowName = window.getName();
+            if (windowName.equals(name)) {
+                return window;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int getWindowsCount() {
+        return windows.size();
+    }
+
+    @Override
+    public IWizardWindow[] getWindows() {
+        return windows.toArray(new IWizardWindow[windows.size()]);
+    }
+
+    @Override
+    public IWizardWindow getPreviousWindow(IWizardWindow window) {
+        int index = windows.indexOf(window);
+        if (index == 0 || index == -1) {
+            return null;
+        }
+        return windows.get(index - 1);
+    }
+
+//    @Override
+//    public Shell getShell() {
+//        if (container == null) {
+//            return null;
+//        }
+//        return container.getShell();
+//    }
+
+    @Override
+    public IWizardWindow getStartingWindow() {
+        if (windows.size() == 0) {
+            return null;
+        }
+        return windows.get(0);
+    }
+
+    @Override
+    public String getWindowTitle() {
+        return windowTitle;
+    }
+
+    @Override
+    public boolean isHelpAvailable() {
+        return isHelpAvailable;
+    }
+
+    @Override
+    public boolean needsPreviousAndNextButtons() {
+        return forcePreviousAndNextButtons || windows.size() > 1;
+    }
+
+    @Override
+    public boolean performCancel() {
+        return true;
+    }
+
+    @Override
+    public abstract boolean performFinish();
+
+    @Override
+    public void setWorkspace(IWizardWorkspace wizardWorkspace) {
+        workspace = wizardWorkspace;
+    }
+
+    public void setDialogSettings(IDialogSettings settings) {
+        dialogSettings = settings;
+    }
+
+    public void setForcePreviousAndNextButtons(boolean b) {
+        forcePreviousAndNextButtons = b;
+    }
+
+    public void setHelpAvailable(boolean b) {
+        isHelpAvailable = b;
+    }
+
+    public void setWindowTitle(String newTitle) {
+        windowTitle = newTitle;
+        if (workspace != null) {
+            workspace.updateWindowTitle();
+        }
+    }
 }
